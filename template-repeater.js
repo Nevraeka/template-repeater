@@ -74,52 +74,50 @@
 	    }
 	
 	    _createClass(TemplateRepeater, [{
-	        key: 'createdCallback',
-	        value: function createdCallback() {
-	            this.shadow = this.createShadowRoot();
-	        }
-	    }, {
 	        key: 'attachedCallback',
 	        value: function attachedCallback() {
-	            this.render();
+	            this.template = this.querySelector('template');
+	            this.render(this.getAttribute('content'));
 	        }
 	    }, {
 	        key: 'render',
-	        value: function render() {
+	        value: function render(val) {
 	            var renderError = "Content should be an Array of objects.";
-	            var content = TemplateRepeater.fromJson(this.getAttribute('content'));
-	            var template = this.shadow.querySelector('template').cloneNode(true);
+	            var template = this.template;
+	            var content = TemplateRepeater.fromJson(val);
+	            this.innerHTML = (Array.isArray(content) ? content.map(andApplyTemplate) : new Error(renderError).message).join('');
 	
-	            this.shadow.innerHTML = Array.isArray(content) ? content.map(mapTemplate).join('') : new Error(renderError);
-	
-	            function mapTemplate(item) {
-	                return TemplateRepeater.interpolate(template, item);
+	            function andApplyTemplate(item) {
+	                return TemplateRepeater.interpolate(template.cloneNode(true), item);
 	            }
 	
-	            return this.shadow.innerHTML;
+	            return this.innerHTML;
 	        }
 	    }, {
 	        key: 'attributeChangedCallback',
-	        value: function attributeChangedCallback(name) {
-	            switch (name) {
-	                case "content":
-	                    this.render();
-	                    break;
+	        value: function attributeChangedCallback(name, oldVal, newVal) {
+	            if (name === "content" && typeof oldVal === 'string') {
+	                this.setAttribute('content', '');
+	                this.render(newVal);
 	            }
 	        }
 	    }], [{
 	        key: 'interpolate',
-	        value: function interpolate(template, obj) {
-	            if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) == "object") {
-	                for (var key in obj) {
-	                    var searchPattern = "${" + key + "}";
-	                    if (template.innerHTML.indexOf(searchPattern) > -1) {
-	                        template = template.innerHTML.replace(searchPattern, obj[key]);
-	                        delete obj[key];
-	                    }
-	                }
+	        value: function interpolate(template, content) {
+	            var contentArr = Object.keys(content);
+	            var updatedHTML = "";
+	
+	            if ((typeof content === 'undefined' ? 'undefined' : _typeof(content)) == "object") {
+	                var andIterateOverData = function andIterateOverData(item) {
+	                    template.innerHTML = template.innerHTML.replace("${" + item + "}", content[item]);
+	                };
+	
+	                contentArr.forEach(andIterateOverData);
+	
+	                updatedHTML += template.innerHTML;
 	            }
-	            return template;
+	
+	            return updatedHTML;
 	        }
 	    }, {
 	        key: 'fromJson',
