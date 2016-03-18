@@ -1,6 +1,6 @@
 {
   "name": "template-repeat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An HTML Web Component that takes a template & content that is meant to be iterated over and renders it to the DOM similar to `ng-repeat` directive in Angular ",
   "scripts": {
     "watch": "webpack --watch"
