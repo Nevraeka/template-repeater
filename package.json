@@ -1,0 +1,24 @@
+{
+  "name": "template-repeat",
+  "version": "1.0.0",
+  "description": "An HTML Web Component that takes a template & content that is meant to be iterated over and renders it to the DOM similar to `ng-repeat` directive in Angular ",
+  "scripts": {
+    "watch": "webpack --watch"
+  },
+  "keywords": [
+    "web-components"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nevraeka/template-repeater.git"
+  },
+  "author": "Erik Isaksen <nevraeka@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nevraeka/template-repeater/issues"
+  },
+  "homepage": "https://github.com/Nevraeka/template-repeater#readme",
+  "dependencies": {
+    "webcomponents.js": "^0.7.21"
+  }
+}
